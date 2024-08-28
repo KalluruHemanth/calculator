@@ -1,18 +1,68 @@
-function calculate(operation) {
-    const input1 = document.getElementById("input1").value;
-    const input2 = document.getElementById("input2").value;
-    let result;
-    
-    //TODO: uncomment the following code, and validate the numbers are not empty
-    // if (input1 === "" || input2 === "") {
-    //     alert("Please enter both numbers.");
-    //     return;
-    // }
+const display = document.getElementById('display');
+const buttons = document.querySelectorAll('button');
 
-    const num1 = parseFloat(input1);
-    const num2 = parseFloat(input2);
-    //TODO: your code here, add the 2 numbers
-    
+let currentNumber = '';
+let previousNumber = '';
+let operator = '';
 
-    document.getElementById("result").textContent = result;
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+        const value = button.value;
+
+        if (value === 'C') {
+            clearDisplay();
+        } else if (value === '=') {
+            calculateResult();
+        } else if (value === '+' || value === '-' || value === '*' || value === '/') {
+            setOperator(value);
+        } else if (value === '.') {
+            addDecimal();
+        } else {
+            addDigit(value);
+        }
+    });
+});
+
+function clearDisplay() {
+    display.value = '';
+    currentNumber = '';
+    previousNumber = '';
+    operator = '';
 }
+
+function calculateResult() {
+    if (currentNumber === '' || previousNumber === '') return;
+
+    const num1 = parseFloat(previousNumber);
+    const num2 = parseFloat(currentNumber);
+    let result;
+
+    switch (operator) {
+        case '+':
+            result = num1 + num2;
+            break;
+        case '-':
+            result = num1 - num2;
+            break;
+        case '*':
+            result = num1 * num2;
+            break;
+        case '/':
+            if (num2 === 0) {
+                display.value = 'Error: Division by zero';
+                return;
+            }
+            result = num1 / num2;
+            break;
+        default:
+            return;
+    }
+
+    display.value = result.toString();
+    currentNumber = '';
+    previousNumber = '';
+    operator = '';
+}
+
+function setOperator(value) {
+    if
